@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    {% load static %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Absensi Online - AKNS</title>
+    <link rel="icon" href="{% static 'img/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome/css/font-awesome.min.css' %}">
+    <link href="{% static 'css/freelancer.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/monthly.css' %}" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet"
+          type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript">
+        window.setTimeout("waktu()", 1000);
+
+        function waktu() {
+            var tanggal = new Date();
+            setTimeout("waktu()", 1000);
+            var sec = ('0' + tanggal.getSeconds()).slice(-2);
+            var hou = ('0' + tanggal.getHours()).slice(-2);
+            var min = ('0' + tanggal.getMinutes()).slice(-2);
+            document.getElementById("output").innerHTML = hou + ":" + min + ":" + sec + ' WIB';
+        }
+    </script>
+
+</head>
+
+<body id="page-top" class="index">
+
+<!-- Navigation -->
+<nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
+    <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+            </button>
+            <a class="navbar-brand" href="#page-top"><img src="{% static 'img/akns_logo_mini.png' %}" width="40"
+                                                          class="img-header"> Absensi
+                AKNS</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li class="page-scroll">
+                    <a href="#page-top"><span class="glyphicon glyphicon-home"></span></a>
+                </li>
+                <li class="page-scroll">
+                    <a href="#search"><span class="glyphicon glyphicon-search"></span></a>
+                </li>
+                <li class="page-scroll">
+                    {% if not isloggedin %}
+                        <a href="{% url 'login' %}"><span
+                                class="glyphicon glyphicon-log-in"></span></a>
+                    {% else %}
+                        <a href="{% url 'logout' %}"><span
+                                class="glyphicon glyphicon-log-out"></span></a>
+                    {% endif %}
+                </li>
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+</nav>
+
+<!-- Header -->
+<header>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Informasi Absensi Pegawai</h1>
+                <h2>Akademi Komunitas Negeri Sumenep</h2>
+                <hr class="star-light">
+            </div>
+            <div class="col-lg-4 col-md-4 right-border">
+                <h4>Kalender</h4>
+                <div style="width:90%;" class="center-block">
+                    <div class="monthly" id="mycalendar"></div>
+                    <div id="output"></div>
+                </div>
+            </div>
+            <div class="col-lg-5 col-md-5">
+                <h4>Timeline Hari ini</h4>
+
+                <ul id="vertical-ticker" class="timeline">
+
+                </ul>
+                <p class="navi"><a href="#" id="ticker-previous"><span
+                        class="glyphicon glyphicon-arrow-left"></span></a>
+                    <a id="stop" href="#"><span class="glyphicon glyphicon-stop"></span></a>
+                    <a id="start" href="#"><span class="glyphicon glyphicon-play"></span></a>
+                    <a href="#" id="ticker-next"><span class="glyphicon glyphicon-arrow-right"></span></a>
+                </p>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <h4>Log</h4>
+
+                <ul id="notif">
+
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</header>
+
+<section id="search">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <h2>Cari Seseorang</h2>
+                <hr class="star-primary">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <label>Nama</label>
+                            <input type="text" class="form-control" name="nama" placeholder="Nama" id="nama" required
+                                   value="">
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <div class="row control-group">
+                        <div class="form-group col-xs-12 floating-label-form-group controls">
+                            <label>Tanggal</label>
+                            <input type="text" class="form-control" name="tgl" placeholder="Tanggal" id="tanggal"
+                                   required value="">
+                            <div class="monthly" id="datepicker"></div>
+                            <p class="help-block text-danger"></p>
+                        </div>
+                    </div>
+                    <br>
+                    <div id="success"></div>
+                    <div class="row">
+                        <div class="form-group col-xs-12">
+                            <button type="submit" name="kirim" class="btn btn-success btn-lg pull-right" value="1">
+                                Cari
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <hr>
+                {% if is_searching %}
+                    <div class="center-block">
+                        <h3>Hasil pencarian untuk "{{ nama }}" pada tanggal "{{ tanggal }}"</h3>
+                        {% if logs.count > 0 %}
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Nama</th>
+                                    <th>Waktu</th>
+                                    <th>Status</th>
+                                    <th>Keterangan</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for log in logs %}
+                                    <tr>
+                                        <td>{{ log.pegawai.nama }}</td>
+                                        <td>{{ log.waktu_masuk }}</td>
+                                        <td>{{ log.status }}</td>
+                                        <td>{{ log.keterangan }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <h3 class="text-center">Data tidak ditemukan</h3>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-center">
+    <div class="footer-above">
+        <div class="container">
+            <div class="row">
+                <div class="footer-col col-md-4">
+                    <h3>Alamat</h3>
+                    <p>Alamat: Jl. Batuan Lenteng KM 2</p>
+                    <p>Telepon: (0328) 661196<br>
+                        Fax: (0328) 661196</p>
+                </div>
+                <div class="footer-col col-md-4">
+                    <img class="img-responsive img-centered" src="{% static 'img/akns_logo.png' %}">
+                </div>
+                <div class="footer-col col-md-4">
+                    <h3>Akademi Komunitas Negeri Sumenep</h3>
+                    <p>Merupakan salah satu perguruan tinggi negeri yang ada di Sumenep, selengkapnya lihat <a
+                            href="http://aknsumenep.ac.id" target="_blank">http://www.aknsumenep.ac.id</a>.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer-below">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    2018 AKNS
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Scroll to Top Button (Only visible on small and extra-small screen sizes) -->
+<div class="scroll-top page-scroll hidden-sm hidden-xs hidden-lg hidden-md">
+    <a class="btn btn-primary" href="#page-top">
+        <i class="fa fa-chevron-up"></i>
+    </a>
+</div>
+<script src="{% static 'plugins/jquery/dist/jquery.js' %}"></script>
+<script src="{% static 'plugins/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+
+<!-- Contact Form JavaScript -->
+<script src="{% static 'js/jqBootstrapValidation.js' %}"></script>
+<script src="{% static 'js/contact_me.js' %}"></script>
+
+<!-- Theme JavaScript -->
+<script src="{% static 'js/freelancer.min.js' %}"></script>
+<script src="{% static 'js/monthly.js' %}"></script>
+<script type="text/javascript">
+    $(window).on('load', function () {
+        $('#mycalendar').monthly({
+            monthNames: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+            mode: 'link'
+        });
+        $('#datepicker').monthly({
+            mode: 'picker',
+            target: '#tanggal',
+            setWidth: '300px',
+            startHidden: true,
+            showTrigger: '#tanggal',
+            stylePast: false,
+            disablePast: false
+        });
+    });
+</script>
+<script src="{% static 'js/jquery.totemticker.js' %}"></script>
+<script type="text/javascript">
+    $(function () {
+        var v = $('#vertical-ticker').totemticker({
+            next: '#ticker-next',
+            previous: '#ticker-previous',
+            stop: '#stop',
+            start: '#start',
+            row_height: '50px', /* Height of each ticker row in PX. Should be uniform. */
+            speed: 1000, /* Speed of transition animation in milliseconds */
+            interval: 600, /* Time between change in milliseconds */
+            max_items: null, /* Integer for how many items to display at once. Resizes height accordingly (OPTIONAL) */
+            mousestop: false, /* If set to true, the ticker will stop on mouseover */
+            direction: 'up'        /* Direction that list will scroll */
+        });
+    });
+
+    function scrollDown() {
+        $('#notif').scrollTop($('#notif').height());
+    }
+
+    $(function () {
+        scrollDown();
+    });
+</script>
+<script type="text/javascript">
+    $('.timeline').load('{% url 'api_absensi' %}', function (r) {
+        $('.timeline').html(r);
+    });
+    window.setInterval(function () {
+        $('#notif').load('{% url 'api_logs' %}', function (r) {
+            $('#notif').html(r);
+        });
+    }, 1000);
+    window.setInterval(function () {
+        $('.timeline').load('{% url 'api_absensi' %}', function (r) {
+            $('.timeline').append(r);
+        });
+    }, 1000)
+    ;
+</script>
+
+</body>
+
+</html>

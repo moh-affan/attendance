@@ -1,0 +1,154 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'plugins/datatables/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'plugins/datatables/jquery.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'plugins/datatables/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'plugins/datatables/select.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Jabatan
+                <small>Master</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Jabatan</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert-place">
+
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Data Jabatan</h3>
+
+                            <div class="pull-right box-tools">
+                                <span data-toggle="tooltip"
+                                      title="Tambah Jabatan"
+                                      data-original-title="Tambah Jabatan">
+                                    <a href="{% url 'jabatan_add' %}" class="btn btn-primary btn-sm add-jabatan"><span
+                                            style="color: #fff;"
+                                            class="fa fa-plus"> Tambah</span></a>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table class="table table-bordered table-hover datatable2">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>ID</th>
+                                    <th>NAMA</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                                <tfoot>
+                                <tr>
+                                    <th></th>
+                                    <th>ID</th>
+                                    <th>NAMA</th>
+                                </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script src="{% static 'plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}" type="text/javascript"></script>
+    <script src="{% static 'plugins/datatables/dataTables.bootstrap.js' %}" type="text/javascript"></script>
+    <script src="{% static 'plugins/datatables/dataTables.buttons.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/dataTables.select.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/buttons.bootstrap.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/buttons.flash.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'plugins/datatables/buttons.print.min.js' %}"></script>
+    <script src="{% static 'plugins/pdfmake/pdfmake.min.js' %}"></script>
+    <script src="{% static 'plugins/sweetalert/sweetalert.min.js' %}"></script>
+    <script src="{% static 'plugins/pdfmake/vfs_fonts.js' %}"></script>
+    <script src="{% static 'plugins/jszip/jszip.min.js' %}"></script>
+    <script src="{% static 'js/dropdown-helper.js' %}"></script>
+    <script src="{% static 'js/form-helper.js' %}"></script>
+    <script>
+        var datatable2 = $('body').find('.datatable2').DataTable({
+            "bPaginate": true,
+            "bLengthChange": true,
+            "bFilter": true,
+            "bSort": true,
+            "bInfo": true,
+            "bAutoWidth": true,
+            "ajax": "{% url 'api_get_jabatan' %}",
+            "columns": [
+                {"data": "idx"},
+                {"data": "id"},
+                {"data": "nama"},
+            ],
+            columnDefs: [{
+                orderable: false,
+                className: 'select-checkbox',
+                targets: 0
+            }, {
+                "targets": 1,
+                "createdCell": function (td, cellData, rowData, row, col) {
+                    var a = $('<a></a>');
+                    a.html('<b>' + cellData + '</b>');
+                    a.addClass("label label-sm label-primary");
+                    a.attr('href', cellData + '/');
+                    $(td).html(a);
+                }
+            }],
+            select: {
+                style: 'os',
+                selector: 'td:first-child'
+            },
+            order: [[1, 'asc']],
+            dom: 'Blfrtip',
+            buttons: [{
+                extend: 'excelHtml5',
+                text: ' <span class="fa fa-file-excel-o"></span> Excel',
+                title: window.title,
+                footer: true,
+                exportOptions: {
+                    columns: "th:not(.hidden-print)"
+                }
+            }, {
+                extend: 'pdfHtml5',
+                text: ' <span class="fa fa-file-pdf-o"></span> PDF',
+                pageSize: 'Folio',
+                orientation: 'portrait',
+                title: window.title,
+                footer: true,
+                exportOptions: {
+                    columns: "th:not(.hidden-print)"
+                }
+            }, {
+                extend: 'print',
+                text: ' <span class="fa fa-print"></span> Print',
+                title: window.title,
+                pageSize: 'Folio',
+                orientation: 'portrait',
+                footer: true,
+                exportOptions: {
+                    columns: "th:not(.hidden-print)"
+                }
+            }]
+        });
+    </script>
+{% endblock %}

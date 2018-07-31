@@ -1,0 +1,107 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block css %}
+    <link href="{% static 'plugins/datatables/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'plugins/datatables/jquery.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'plugins/datatables/buttons.bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'plugins/datatables/select.dataTables.min.css' %}" rel="stylesheet">
+    <link href="{% static 'plugins/sweetalert/sweetalert.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Absen
+                <small>Manual</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Absen Manual</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert-place">
+
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Absen Pegawai Tanggal {% now 'D, d F Y' %}</h3>
+
+                            <div class="pull-right box-tools">
+                                {#                                <span data-toggle="tooltip"#}
+                                {#                                      title="Tambah Pegawai"#}
+                                {#                                      data-original-title="Tambah Pegawai">#}
+                                {#                                    <a href="{% url 'pegawai_add' %}" class="btn btn-primary btn-sm add-pegawai"><span#}
+                                {#                                            style="color: #fff;"#}
+                                {#                                            class="fa fa-plus"> Tambah</span></a>#}
+                                {#                                </span>#}
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <form method="post">
+                                {% csrf_token %}
+                                <input type="submit" name="simpan" value="Simpan" class="btn btn-flat btn-primary">
+                                <hr>
+                                <table class="table table-bordered table-hover datatable2">
+                                    <thead>
+                                    <tr>
+                                        <th>NIP</th>
+                                        <th>NAMA</th>
+                                        <th>STATUS</th>
+                                        <th>KETERANGAN</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for dt in data %}
+                                        <tr>
+                                            <td>{{ dt.nip }}</td>
+                                            <td>{{ dt.nama }}</td>
+                                            <td>
+                                                <input type="hidden" name="log_id[{{ dt.id }}]" value="{{ dt.log_id }}"/>
+                                                <input type="hidden" name="peg_id[{{ dt.id }}]" value="{{ dt.id }}"/>
+                                                <input type="radio" name="status[{{ dt.id }}]"
+                                                       value="H" {% if dt.status == 'H' %}checked{% endif %}/> Hadir
+                                                <input type="radio" name="status[{{ dt.id }}]"
+                                                       value="A" {% if dt.status == 'A' %}checked{% endif %}/> Tanpa
+                                                Keterangan
+                                                <input type="radio" name="status[{{ dt.id }}]"
+                                                       value="I" {% if dt.status == 'I' %}checked{% endif %}/> Ijin
+                                                <input type="radio" name="status[{{ dt.id }}]"
+                                                       value="S" {% if dt.status == 'S' %}checked{% endif %}/> Sakit
+                                            </td>
+                                            <td><input type="text" class="form-control" name="keterangan[{{ dt.id }}]"
+                                                       value="{{ dt.keterangan }}"/>
+
+                                        </tr>
+
+                                    {% endfor %}
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>NIP</th>
+                                        <th>NAMA</th>
+                                        <th>STATUS</th>
+                                        <th>KETERANGAN</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script>
+
+    </script>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block css %}
+{% endblock %}
+
+{% block content %}
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Jabatan
+                <small>Master</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Jabatan</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert-place">
+
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Tambah Jabatan</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="col-md-8">
+                                <form action="{% url 'jabatan_add' %}" method="POST" id="tambah-jabatan">
+                                    {% csrf_token %}
+                                    <div class="form-group {% if form.nama.errors %}has-error{% endif %}">
+                                        <label for="{{ form.nama.id_for_label }}" class="control-label">Nama</label>
+                                        {{ form.nama }}
+                                        <span class="help-block"><strong>{{ form.nama.errors }} </strong></span>
+                                    </div>
+                                    <div class="col-md-3 col-md-push-4">
+                                        <button type="submit" class="btn btn-success center-block">Simpan</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+
+{% block js %}
+
+{% endblock %}

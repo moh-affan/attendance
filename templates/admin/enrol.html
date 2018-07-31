@@ -1,0 +1,259 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block css %}
+    <style>
+        .camera-container {
+            position: relative;
+            width: 320px;
+            height: 240px;
+            margin: 10px auto;
+        }
+
+        .camera-container video, .camera-container canvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Enrol
+                <small>Pegawai</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Enrol</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                {% if simpan %}
+                    <div class="col-md-12 simpan-alert">
+                        <div class="alert alert-success"><span class="fa fa-success"></span> Berhasil Disimpan !
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="col-md-5">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Kamera</h3>
+
+                            <div class="pull-right box-tools">
+
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="btn-group">
+                                <span class="btn btn-default" disabled><span class="fa fa-camera"></span></span>
+                                <button class="btn btn-success camera-on">ON</button>
+                                <button class="btn btn-danger camera-off">OFF</button>
+                            </div>
+                            <div class="camera-container center-block img-thumbnail">
+                                <video id="video" width="320" height="240" preload autoplay loop muted></video>
+                                <canvas id="canvas" width="320" height="240"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-7 scrollable">
+                    <div class="box box-success">
+                        <div class="box-header">
+                            <h3 class="box-title">Capture</h3>
+
+                            <div class="pull-right box-tools">
+
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="col-md-3">
+                                <img id="capture-1" width="50" height="50" src="{% static 'img/avatar5.png' %}"
+                                     class="img-responsive img-thumbnail center-block">
+                                <p class="text-center"><strong>Wajah 1</strong><br>
+                                    <button class="btn btn-sm btn-default capture" data-target="#capture-1"
+                                            data-index="0">Capture
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <img id="capture-2" width="50" height="50" src="{% static 'img/avatar5.png' %}"
+                                     class="img-responsive img-thumbnail center-block">
+                                <p class="text-center"><strong>Wajah 2</strong><br>
+                                    <button class="btn btn-sm btn-default capture" data-target="#capture-2"
+                                            data-index="1">Capture
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <img id="capture-3" width="50" height="50" src="{% static 'img/avatar5.png' %}"
+                                     class="img-responsive img-thumbnail center-block">
+                                <p class="text-center"><strong>Wajah 3</strong><br>
+                                    <button class="btn btn-sm btn-default capture" data-target="#capture-3"
+                                            data-index="2">Capture
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <img id="capture-4" width="50" height="50" src="{% static 'img/avatar5.png' %}"
+                                     class="img-responsive img-thumbnail center-block">
+                                <p class="text-center"><strong>Wajah 4</strong><br>
+                                    <button class="btn btn-sm btn-default capture" data-target="#capture-4"
+                                            data-index="3">Capture
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <img id="capture-5" width="50" height="50" src="{% static 'img/avatar5.png' %}"
+                                     class="img-responsive img-thumbnail center-block">
+                                <p class="text-center"><strong>Wajah 5</strong><br>
+                                    <button class="btn btn-sm btn-default capture" data-target="#capture-5"
+                                            data-index="4">Capture
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <img id="capture-6" width="50" height="50" src="{% static 'img/avatar5.png' %}"
+                                     class="img-responsive img-thumbnail center-block">
+                                <p class="text-center"><strong>Wajah 6</strong><br>
+                                    <button class="btn btn-sm btn-default capture" data-target="#capture-6"
+                                            data-index="5">Capture
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <img id="capture-7" width="50" height="50" src="{% static 'img/avatar5.png' %}"
+                                     class="img-responsive img-thumbnail center-block">
+                                <p class="text-center"><strong>Wajah 7</strong><br>
+                                    <button class="btn btn-sm btn-default capture" data-target="#capture-7"
+                                            data-index="6">Capture
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <img id="capture-8" width="50" height="50" src="{% static 'img/avatar5.png' %}"
+                                     class="img-responsive img-thumbnail center-block">
+                                <p class="text-center"><strong>Wajah 8</strong><br>
+                                    <button class="btn btn-sm btn-default capture" data-target="#capture-8"
+                                            data-index="7">Capture
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <img id="capture-9" width="50" height="50" src="{% static 'img/avatar5.png' %}"
+                                     class="img-responsive img-thumbnail center-block">
+                                <p class="text-center"><strong>Wajah 9</strong><br>
+                                    <button class="btn btn-sm btn-default capture" data-target="#capture-9"
+                                            data-index="8">Capture
+                                    </button>
+                                </p>
+                            </div>
+                            <div class="col-md-3">
+                                <img id="capture-10" width="50" height="50" src="{% static 'img/avatar5.png' %}"
+                                     class="img-responsive img-thumbnail center-block">
+                                <p class="text-center"><strong>Wajah 10</strong><br>
+                                    <button class="btn btn-sm btn-default capture" data-target="#capture-10"
+                                            data-index="9">Capture
+                                    </button>
+                                </p>
+                            </div>
+                            <form action="{% url 'enrol_index' %}" method="POST" id="enrollment">
+                                {% csrf_token %}
+                                <div class="col-md-10">
+
+                                    <div class="form-group {% if form.nama.errors %}has-error{% endif %} %}}}">
+                                        <div class="form-group {% if form.nama.errors %}has-error{% endif %}">
+                                            <label for="id_pegawai" class="control-label">Nama</label>
+                                            <select name="id_pegawai" id="id_pegawai" required class="form-control">
+                                                <option value="">------------</option>
+                                            </select>
+                                            <span class="help-block"><strong>{% if id_pegawai_error is not None %}
+                                                aa{% endif %} </strong></span>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" name="face_0" id="face_0" required>
+                                    <input type="hidden" name="face_1" id="face_1" required>
+                                    <input type="hidden" name="face_2" id="face_2" required>
+                                    <input type="hidden" name="face_3" id="face_3" required>
+                                    <input type="hidden" name="face_4" id="face_4" required>
+                                    <input type="hidden" name="face_5" id="face_5" required>
+                                    <input type="hidden" name="face_6" id="face_6" required>
+                                    <input type="hidden" name="face_7" id="face_7" required>
+                                    <input type="hidden" name="face_8" id="face_8" required>
+                                    <input type="hidden" name="face_9" id="face_9" required>
+
+                                </div>
+                                <div class="col-md-2">
+                                    <label>&nbsp;</label>
+                                    <button id="simpan" class="btn btn-primary"><span
+                                            class="fa fa-save"></span>Simpan
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <script src="{% static 'plugins/tracking.js/build/tracking-min.js' %}"></script>
+    <script src="{% static 'plugins/tracking.js/build/data/face-min.js' %}"></script>
+    <script src="{% static 'js/jsfeat-min.js' %}"></script>
+    <script src="{% static 'js/pca.js' %}"></script>
+    <script src="{% static 'js/face-tracking.js' %}"></script>
+    <script src="{% static 'js/dropdown-helper.js' %}"></script>
+    <script src="{% static 'js/form-helper.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            $.get('{% url 'api_get_pegawai_dd' %}').done(function (data) {
+                $('select#id_pegawai').dropdown(data.data);
+            });
+            {% if simpan %}
+                setTimeout(function () {
+                    $('.simpan-alert').hide();
+                }, 4000)
+            {% endif %}
+        });
+        var c = 0;
+        var curElem;
+        {#        var dataTraining = new Array(5);#}
+        var fr = $('#video').facetrack({
+            videoEl: '#video',
+            canvasEl: '#canvas',
+            centerBoxWidth: 110,
+            centerBoxHeight: 110,
+            captureCallback: function (a, b) {
+                if (typeof a != 'undefined' && typeof curElem != 'undefined')
+                    curElem.attr('src', a);
+                {#                dataTraining[c] = b;#}
+                $('#face_' + c).val(a.replace(/^data:image\/(png);base64,/, ''));
+            },
+            dimen: {
+                width: 50,
+                height: 50
+            }
+        });
+        $('.camera-on').click(function () {
+            fr.startCamera();
+        });
+        $('.camera-off').click(function () {
+            fr.stopCamera();
+        });
+        $('.capture').click(function () {
+            curElem = $($(this).data('target'));
+            c = $(this).data('index');
+        });
+        $('#simpan').click(function () {
+            {#            console.log(dataTraining);#}
+        });
+
+    </script>
+{% endblock %}

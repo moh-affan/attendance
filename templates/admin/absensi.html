@@ -1,0 +1,132 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block css %}
+    <style>
+        .camera-container {
+            position: relative;
+            width: 320px;
+            height: 240px;
+            margin: 10px auto;
+        }
+
+        .camera-container video, .camera-container canvas {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Absen
+                <small>Pegawai</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Absen</li>
+            </ol>
+        </section>
+        <section class="content">
+            <div class="row">
+                {% if simpan %}
+                    <div class="col-md-12 simpan-alert">
+                        <div class="alert alert-success"><span class="fa fa-success"></span> Berhasil Disimpan !
+                        </div>
+                    </div>
+                {% endif %}
+                <div class="col-md-8">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Kamera</h3>
+
+                            <div class="pull-right box-tools">
+
+                            </div>
+                        </div>
+                        <div class="box-body">
+{#                            <div class="btn-group">#}
+{#                                <span class="btn btn-default" disabled><span class="fa fa-camera"></span></span>#}
+{#                                <button class="btn btn-success camera-on">ON</button>#}
+{#                                <button class="btn btn-danger camera-off">OFF</button>#}
+{#                            </div>#}
+                            <div class="camera-container center-block img-thumbnail">
+                                <video id="video" width="320" height="240" preload autoplay loop muted></video>
+                                <canvas id="canvas" width="320" height="240"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 scrollable">
+                    <div class="box box-success">
+                        <div class="box-header">
+                            <h3 class="box-title">Log</h3>
+
+                            <div class="pull-right box-tools">
+
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <ul>
+                                {% for l in logs %}
+                                    <li>{{ l }}</li>
+                                {% endfor %}
+                            </ul>
+                            <form action="{% url 'absen_index' %}" method="POST" id="absen-form">
+                                {% csrf_token %}
+                                <div class="col-md-10">
+                                    <input type="hidden" name="face" id="face" required>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script src="{% static 'plugins/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <script src="{% static 'plugins/tracking.js/build/tracking-min.js' %}"></script>
+    <script src="{% static 'plugins/tracking.js/build/data/face-min.js' %}"></script>
+    <script src="{% static 'js/jsfeat-min.js' %}"></script>
+    <script src="{% static 'js/pca.js' %}"></script>
+    <script src="{% static 'js/face-tracking.js' %}"></script>
+    <script src="{% static 'js/dropdown-helper.js' %}"></script>
+    <script src="{% static 'js/form-helper.js' %}"></script>
+
+    <script>
+        $(document).ready(function () {
+            {% if simpan %}
+                setTimeout(function () {
+                    $('.simpan-alert').hide();
+                }, 4000);
+            {% endif %}
+
+            var c = 0;
+            var fr = $('#video').facetrack({
+                videoEl: '#video',
+                canvasEl: '#canvas',
+                centerBoxWidth: 110,
+                centerBoxHeight: 110,
+                captureCallback: function (a, b) {
+                    console.log(b);
+{#                    $('#face').val(b);#}
+                    $('#face').val(a.replace(/^data:image\/(png);base64,/,''));
+                    $('#absen-form').submit();
+                },
+                dimen: {
+                    width: 50,
+                    height: 50
+                }
+            });
+
+            fr.startCamera();
+        });
+
+    </script>
+{% endblock %}

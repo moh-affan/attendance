@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Absensi Pegawai AKNS </title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="icon" href="{% static 'img/favicon.png' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/font-awesome/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/Ionicons/css/ionicons.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/AdminLTE.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/iCheck/square/blue.css' %}">
+    <link rel="stylesheet" href="{% static 'css/skins/skin-blue.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/morris.js/morris.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/jvectormap/jquery-jvectormap.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-daterangepicker/daterangepicker.css' %}">
+    <link rel="stylesheet" href="{% static 'plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}">
+
+    {% block css %}
+    {% endblock %}
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="{% static 'js/html5shiv.min.js' %}"></script>
+    <script src="{% static 'js/respond.min.js' %}"></script>
+    <![endif]-->
+</head>
+<body class="hold-transition skin-blue sidebar-mini fa-c">
+<div class="wrapper">
+    <header class="main-header">
+        <a href=" {% url 'dashboard' %}" class="logo">
+            <span class="logo-mini"><b>A</b>KNS</span>
+            <span class="logo-lg"><b>Absen</b>AKNS</span>
+        </a>
+        <nav class="navbar navbar-static-top">
+            <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Menu</span>
+            </a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="{% static 'img/user2-160x160.jpg' %}" class="user-image" alt="User Image">
+                            <span class="hidden-xs">{{ pegawai.nama }}</span>
+                        </a>
+                        <ul class=" dropdown-menu">
+                            <li class="user-header">
+                                <img src="{% static 'img/user2-160x160.jpg' %}" class="img-circle" alt="User Image">
+                                <p>
+                                    {{ pegawai.nama }} - {{ pegawai.jabatan.nama }}
+                                    <small>Administrator</small>
+                                </p>
+                            </li>
+                            <li class="user-body">
+                                <div class="row">
+                                    <br>
+                                </div>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="{% url 'logout' %}" class="btn btn-default btn-flat">Sign out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    {% include 'sidebar.html' %}
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            <b>Versi</b> 1.0.0 beta
+        </div>
+        <strong>&copy; {% now 'Y' %} <a href="{% url 'index' %}">Akademi Komunitas Negeri Sumenep</a>.</strong>
+    </footer>
+</div>
+
+<script src="{% static 'plugins/jquery/dist/jquery.min.js' %}"></script>
+<script src="{% static 'plugins/jquery-ui/jquery-ui.min.js' %}"></script>
+
+<script>
+    $.widget.bridge('uibutton', $.ui.button);
+</script>
+<script src="{% static 'plugins/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+<script>
+    $(document).ready(function () {
+        $('body').find('.{% if active is not None %}{{ active }}{% else %}dashboard{% endif %}').addClass('active');
+    });
+</script>
+
+{% block js %}
+{% endblock %}
+<script src="{% static 'js/adminlte.min.js' %}"></script>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+{% extends 'main.html' %}
+{% load  static %}
+{% block css %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                Dashboard
+                <small>Control panel</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Dashboard</li>
+            </ol>
+        </section>
+        {% load lookup %}
+        <section class="content">
+            <div class="row">
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-aqua">
+                        <div class="inner">
+                            <h3>{{ c_absen|lookup:0 }}</h3>
+
+                            <p>Hadir</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-checkmark"></i>
+                        </div>
+                        <a href="{% url 'laporan_index' %}" class="small-box-footer">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-green">
+                        <div class="inner">
+                            <h3>{{ c_absen|lookup:1 }}</h3>
+
+                            <p>Izin</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-information"></i>
+                        </div>
+                        <a href="{% url 'laporan_index' %}" class="small-box-footer">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-yellow">
+                        <div class="inner">
+                            <h3>{{ c_absen|lookup:2 }}</h3>
+
+                            <p>Sakit</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-medkit"></i>
+                        </div>
+                        <a href="{% url 'laporan_index' %}" class="small-box-footer">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-xs-6">
+                    <div class="small-box bg-red">
+                        <div class="inner">
+                            <h3>{{ c_absen|lookup:3 }}</h3>
+
+                            <p>Tanpa Keterangan</p>
+                        </div>
+                        <div class="icon">
+                            <i class="ion ion-android-close"></i>
+                        </div>
+                        <a href="{% url 'laporan_index' %}" class="small-box-footer">More info <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+{% endblock %}
+
+
+{% block js %}
+    <script src="{% static 'plugins/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'plugins/morris.js/morris.min.js' %}"></script>
+    <script src="{% static 'plugins/jquery-knob/dist/jquery.knob.min.js' %}"></script>
+    <script src="{% static 'plugins/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js' %}"></script>
+{% endblock %}
