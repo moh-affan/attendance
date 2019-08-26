@@ -24,7 +24,7 @@ class Pegawai(models.Model):
     alamat = models.CharField(max_length=255)
     jenis_kelamin = models.CharField(max_length=1, choices=JENIS_KELAMIN)
     no_hp = models.CharField(max_length=15, unique=True)
-    jabatan = models.ForeignKey(Jabatan, related_name='pegawai')
+    jabatan = models.ForeignKey(Jabatan, null=True, related_name='pegawai', on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.nip
@@ -35,8 +35,8 @@ class Akun(models.Model):
         ('pegawai', 'Pegawai'),
         ('admin', 'Administrator'),
     )
-    akun = models.ForeignKey(User)
-    pegawai = models.ForeignKey(Pegawai)
+    akun = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    pegawai = models.ForeignKey(Pegawai, null=True, on_delete=models.SET_NULL)
     jenis_akun = models.CharField(max_length=20, choices=JENIS_AKUN_CHOICES)
 
     def __str__(self):

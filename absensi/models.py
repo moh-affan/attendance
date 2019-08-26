@@ -9,7 +9,7 @@ from pegawai.models import Pegawai
 
 class Log(models.Model):
     CHOICES = (('H', 'Hadir'), ('A', 'Tanpa Keterangan'), ('I', 'Ijin'), ('S','Sakit'))
-    pegawai = models.ForeignKey(Pegawai, related_name='log', blank=True)
+    pegawai = models.ForeignKey(Pegawai, related_name='log', blank=True, on_delete=models.CASCADE)
     keterangan = models.CharField(max_length=200)
     status = models.CharField(max_length=1, choices=CHOICES, default='H')
     waktu_masuk = models.DateTimeField(auto_now=False)

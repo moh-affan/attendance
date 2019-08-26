@@ -4,9 +4,8 @@ from __future__ import unicode_literals
 import base64
 import json
 import os
-from cv2 import face
-
 import cv2
+
 import numpy as np
 from datetime import datetime, date
 
@@ -20,9 +19,9 @@ from pegawai.models import Pegawai
 
 FOTO_PATH = os.path.join(BASE_DIR, "foto")
 YALE_FOTO_PATH = os.path.join(BASE_DIR, "orl")
-pcaRecognizer = face.createEigenFaceRecognizer(num_components=5)
-fisherRecognizer = face.createFisherFaceRecognizer()
-lbphRecognizer = face.createLBPHFaceRecognizer()
+pcaRecognizer = cv2.face.EigenFaceRecognizer_create(num_components=5)
+fisherRecognizer = cv2.face.FisherFaceRecognizer_create()
+lbphRecognizer = cv2.face.LBPHFaceRecognizer_create()
 TEMP_DIR = os.path.join(BASE_DIR, "temp")
 
 
@@ -32,43 +31,48 @@ TEMP_DIR = os.path.join(BASE_DIR, "temp")
 def index(request):
     simpan = False
     if request.method == 'POST':
-        faces = [b'' + request.POST['face_0'],
-                 b'' + request.POST['face_1'],
-                 b'' + request.POST['face_2'],
-                 b'' + request.POST['face_3'],
-                 b'' + request.POST['face_4'],
-                 b'' + request.POST['face_5'],
-                 b'' + request.POST['face_6'],
-                 b'' + request.POST['face_7'],
-                 b'' + request.POST['face_8'],
-                 b'' + request.POST['face_9']]
+        faces = [str(request.POST['face_0']).encode('ascii'),
+                 str(request.POST['face_1']).encode('ascii'),
+                 str(request.POST['face_2']).encode('ascii'),
+                 str(request.POST['face_3']).encode('ascii'),
+                 str(request.POST['face_4']).encode('ascii'),
+                 str(request.POST['face_5']).encode('ascii'),
+                 str(request.POST['face_6']).encode('ascii'),
+                 str(request.POST['face_7']).encode('ascii'),
+                 str(request.POST['face_8']).encode('ascii'),
+                 str(request.POST['face_9']).encode('ascii')]
         id_pegawai = request.POST['id_pegawai']
         save_faces(id_pegawai, faces)
         simpan = True
-    return render(request, 'admin\enrol.html', {'active': 'enrol', 'simpan': simpan})
+    return render(request, 'admin\\enrol.html', {'active': 'enrol', 'simpan': simpan})
 
 
 def absensi(request):
     imgs, lbl = prepare_training_data(FOTO_PATH)
-    pcaRecognizer.train(imgs, np.array(lbl))
-    # # TEST
-    # data = cv2.imread(os.path.join(FOTO_PATH,'2_faces/1.png'))
-    # data = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY)
-    # pg,lbl = predict(data)
-    # if pg is not None:
-    #     log = Log.objects.filter(pegawai_id=pg.id, waktu_masuk__date=date.today())
-    #     if len(log) > 0:
-    #         lg = Log.objects.get(pk=log[0].id)
-    #         lg.waktu_keluar = datetime.now()
-    #         lg.save(force_update=True)
-    #     else:
-    #         Log(keterangan="Wajah dikenali sebagai {}".format(pg.nama), pegawai=pg, status='H').save()
-    # else:
-    #     Log(keterangan="Wajah tidak dikenali", status='A', pegawai_id=0).save()
-    # # END TEST
+    print(pcaRecognizer.train(imgs, np.array(lbl)))
+    # TEST
+    data = cv2.imread(os.path.join(TEMP_DIR, 'tmp.png'))
+    # data = cv2.imread(os.path.join(FOTO_PATH, '2_faces/1.png'))
+    data = cv2.cvtColor(data, cv2.COLOR_BGR2GRAY)
+    pg, lbl = predict(data)
+    print("pg")
+    print(pg)
+    print("label")
+    print(lbl)
+    if pg is not None:
+        log = Log.objects.filter(pegawai_id=pg.id, waktu_masuk__date=date.today())
+        if len(log) > 0:
+            lg = Log.objects.get(pk=log[0].id)
+            lg.waktu_keluar = datetime.now()
+            lg.save(force_update=True)
+        else:
+            Log(keterangan="Wajah dikenali sebagai {}".format(pg.nama), pegawai=pg, status='H').save()
+    else:
+        Log(keterangan="Wajah tidak dikenali", status='A', pegawai_id=0, waktu_masuk=datetime.now()).save()
+    # END TEST
     if request.method == 'POST':
         # data = np.array(request.POST['face'].split(','), 'uint8')
-        face = b'' + request.POST['face']
+        face = str(request.POST['face']).encode('ascii')
         clear_dir(TEMP_DIR)
         save_face(TEMP_DIR, 'tmp', face)
         data = cv2.imread(os.path.join(TEMP_DIR, 'tmp.png'))
@@ -86,7 +90,8 @@ def absensi(request):
         else:
             Log(keterangan="Wajah tidak dikenali", status='A', pegawai_id=0, waktu_masuk=datetime.now()).save()
     logs = Log.objects.filter(waktu_masuk__date=date.today())
-    return render(request, 'admin\\absensi.html', {'active': 'absen', 'logs': logs})
+    # return render(request, 'admin\\absensi.html', {'active': 'absen', 'logs': logs})
+    return HttpResponse(pg)
 
 
 def predict(test_img):
@@ -170,10 +175,11 @@ def manual(request):
                     log = Log(pegawai_id=pg.id, status=status, keterangan=keterangan, waktu_masuk=datetime.now())
                     log.save()
             except:
-                print "POST tidak ditemukan"
+                print("POST tidak ditemukan")
     data = []
     for peg in pegawai:
-        log = Log.objects.filter(pegawai_id=peg.id, waktu_masuk__date=date.today()).order_by('-waktu_masuk').exclude(id=0)
+        log = Log.objects.filter(pegawai_id=peg.id, waktu_masuk__date=date.today()).order_by('-waktu_masuk').exclude(
+            id=0)
         if len(log) > 0:
             absen = {'id': peg.id, 'nip': peg.nip, 'nama': peg.nama, 'status': log[0].status,
                      'keterangan': log[0].keterangan, 'waktu': log[0].waktu_masuk, 'log_id': log[0].id}
